@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cieridtv3gaat"
+path="res://.godot/imported/alarm 10 sec.MP3-94588a473b7e652977cfb121b9ca2190.mp3str"
+
+[deps]
+
+source_file="res://Levels/music/alarm 10 sec.MP3"
+dest_files=["res://.godot/imported/alarm 10 sec.MP3-94588a473b7e652977cfb121b9ca2190.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

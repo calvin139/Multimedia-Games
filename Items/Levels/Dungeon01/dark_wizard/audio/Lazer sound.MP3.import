@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bli4ahndushxa"
+path="res://.godot/imported/Lazer sound.MP3-5d546e0cc9d405be3cc904ef50061605.mp3str"
+
+[deps]
+
+source_file="res://Levels/Dungeon01/dark_wizard/audio/Lazer sound.MP3"
+dest_files=["res://.godot/imported/Lazer sound.MP3-5d546e0cc9d405be3cc904ef50061605.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

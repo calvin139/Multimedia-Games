@@ -1,0 +1,361 @@
+[gd_scene load_steps=27 format=4 uid="uid://chcb2oelfl72f"]
+
+[ext_resource type="Script" path="res://Levels/scripts/level.gd" id="1_1ohot"]
+[ext_resource type="AudioStream" uid="uid://io7jxqk648xa" path="res://Levels/music/example_music_01.ogg" id="2_5s7x6"]
+[ext_resource type="PackedScene" uid="uid://cq32mohonpsw3" path="res://Tile Maps/grass-tiles-01.tscn" id="3_ukscd"]
+[ext_resource type="PackedScene" uid="uid://dr4blo7ya448q" path="res://Levels/player_spawn.tscn" id="4_1fp1i"]
+[ext_resource type="PackedScene" uid="uid://d4igjv570x7c4" path="res://Props/Plants/plant.tscn" id="5_wa4h8"]
+[ext_resource type="PackedScene" uid="uid://vlpiuopcomwi" path="res://Levels/level_transition.tscn" id="5_xj8mw"]
+[ext_resource type="PackedScene" uid="uid://bi8crg3nv50qw" path="res://npc/npc.tscn" id="7_62xuh"]
+[ext_resource type="PackedScene" uid="uid://dapdr3ojo2pha" path="res://npc/npc_behavior_wander.tscn" id="8_f8c10"]
+[ext_resource type="Resource" uid="uid://csvi3x1wp3gy6" path="res://npc/00_npcs/npc_01.tres" id="8_fbvcf"]
+[ext_resource type="Resource" uid="uid://bqfxxks18ou8u" path="res://npc/00_npcs/npc_02.tres" id="8_yuemd"]
+[ext_resource type="PackedScene" uid="uid://b22o8rtjyby8c" path="res://Interactables/dialog/dialog_interaction.tscn" id="10_s1pmn"]
+[ext_resource type="PackedScene" uid="uid://dpenv0euqqlkg" path="res://npc/npc_behavior_patrol.tscn" id="11_q675y"]
+[ext_resource type="Script" path="res://Interactables/dialog/scripts/dialog_text.gd" id="11_ufet7"]
+[ext_resource type="Resource" uid="uid://cdc3sykvmnn27" path="res://npc/00_npcs/00_hero.tres" id="12_2ebyk"]
+[ext_resource type="PackedScene" uid="uid://dyhn3j7qk4dqw" path="res://npc/patrol_location.tscn" id="12_sc27x"]
+[ext_resource type="Script" path="res://Interactables/dialog/scripts/dialog_choice.gd" id="16_as0ht"]
+[ext_resource type="Script" path="res://Interactables/dialog/scripts/dialog_branch.gd" id="17_lam8a"]
+[ext_resource type="PackedScene" uid="uid://cf0a8hxch6kfd" path="res://Props/pot/pot.tscn" id="18_gcr0t"]
+[ext_resource type="Resource" uid="uid://cvnr3a38pmudn" path="res://quests/recover_lost_flute.tres" id="19_2koiu"]
+[ext_resource type="PackedScene" uid="uid://ch2oxh3rsa2fr" path="res://Interactables/dungeon/pressure_plate.tscn" id="19_ti3ls"]
+[ext_resource type="PackedScene" uid="uid://b523kljtfiar7" path="res://quests/utility_nodes/quest_advance_trigger.tscn" id="20_mgke4"]
+[ext_resource type="Resource" uid="uid://cx38on0tnqdyi" path="res://quests/long_quest.tres" id="21_7aj2d"]
+[ext_resource type="Script" path="res://quests/utility_nodes/quest_activated_switch.gd" id="21_dorfn"]
+[ext_resource type="PackedScene" uid="uid://cwby8egx8vwx2" path="res://quests/utility_nodes/quest_activated_switch.tscn" id="23_vtf5b"]
+[ext_resource type="Script" path="res://Levels/Area01/tutorial.gd" id="25_s24fa"]
+
+[sub_resource type="GDScript" id="GDScript_ootk3"]
+script/source = "extends Node
+
+@onready var quest_advance_trigger: QuestAdvanceTrigger = $\"..\"
+
+
+func _ready() -> void:
+	quest_advance_trigger.advanced.connect( quest_complete )
+
+
+func quest_complete() -> void:
+	PlayerManager.INVENTORY_DATA.use_item( load(\"res://Items/magical_flute.tres\") )
+	pass
+"
+
+[node name="02" type="Node2D"]
+y_sort_enabled = true
+script = ExtResource("1_1ohot")
+music = ExtResource("2_5s7x6")
+
+[node name="grass-tiles-01" parent="." instance=ExtResource("3_ukscd")]
+tile_map_data = PackedByteArray("AAD9//7/AAACAAQAAAD9////AAACAAUAAAD9/wAAAAACAAYAAAD9/wEABgAAAAAAAAD9/wIABgAAAAAAAAD9/wMABgAAAAAAAAD9/wQABgAAAAAAAAD9/wUABgAAAAAAAAD9/wYABgAAAAAAAAD9/wcABgAAAAAAAAD9/wgABgAAAAAAAAD9/wkABgAAAAAAAAD+//7/AAADAAQAAAD+////AAADAAUAAAD+/wAAAAADAAYAAAD+/wEABgAAAAAAAAD+/wIABgAAAAAAAAD+/wMABgAAAAAAAAD+/wQABgAAAAAAAAD+/wUABgAAAAAAAAD+/wYABgAAAAAAAAD+/wcABgAAAAAAAAD+/wgABgAAAAAAAAD+/wkABgAAAAAAAAD///7/AAAEAAQAAAD/////AAAEAAUAAAD//wAAAAAEAAYAAAD//wEAAAAKAAUAAAD//wIAAAAKAAUAAAD//wMAAAAKAAUAAAD//wQAAAAKAAUAAAD//wUAAAAKAAUAAAD//wYAAAAKAAUAAAD//wcAAAAKAAUAAAD//wgAAAAKAAYAAAD//wkAAAAJAAYAAAAAAP7/AAAEAAQAAAAAAP//AAAEAAUAAAAAAAAAAAAEAAYAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAUAAAAEAAAAAAAAAAYAAAAFAAEAAAAAAAcAAAAHAAIAAAAAAAgAAAALAAYAAAAAAAkAAAADAAUAAAABAP7/AAACAAQAAAABAP//AAACAAUAAAABAAAAAAACAAYAAAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAAAAAABAAQAAAABAAAAAAABAAUAAAACAAEAAAABAAYAAAAHAAMAAAABAAcAAAABAAAAAAABAAgAAAANAAYAAAABAAkAAAACAAUAAAACAP7/AAADAAQAAAACAP//AAADAAUAAAACAAAAAAADAAYAAAACAAEAAAACAAAAAAACAAIAAAACAAAAAAACAAMAAAACAAAAAAACAAQAAAACAAAAAAACAAUAAAACAAAAAAACAAYAAAACAAAAAAACAAcAAAACAAAAAAACAAgAAAANAAYAAAACAAkAAAACAAUAAAADAP7/AAAEAAQAAAADAP//AAAEAAUAAAADAAAAAAAEAAYAAAADAAEAAAADAAAAAAADAAIAAAADAAAAAAADAAMAAAADAAAAAAADAAQAAAAEAAMAAAADAAUAAAADAAAAAAADAAYAAAADAAAAAAADAAcAAAADAAAAAAADAAgAAAANAAYAAAADAAkAAAACAAUAAAAEAP7/AAACAAQAAAAEAP//AAADAAUAAAAEAAAAAAANAAcAAAAEAAEAAAACAAEAAAAEAAIAAAAAAAAAAAAEAAMAAAAAAAAAAAAEAAQAAAAAAAAAAAAEAAUAAAAAAAAAAAAEAAYAAAAEAAMAAAAEAAcAAAAAAAAAAAAEAAgAAAAMAAYAAAAEAAkAAAAEAAUAAAAFAP7/AAAOAAYAAAAFAP//AAAJAAcAAAAFAAAAAAAOAAcAAAAFAAEAAAABAAAAAAAFAAIAAAABAAEAAAAFAAMAAAABAAAAAAAFAAQAAAABAAAAAAAFAAUAAAABAAAAAAAFAAYAAAABAAAAAAAFAAcAAAABAAAAAAAFAAgAAAAMAAYAAAAFAAkAAAAEAAUAAAAGAP7/AAAMAAAAAAAGAP//AAAMAAEAAAAGAAAAAAAMAAEAAAAGAAEAAAAMAAMAAAAGAAIAAAACAAAAAAAGAAMAAAACAAAAAAAGAAQAAAACAAAAAAAGAAUAAAACAAAAAAAGAAYAAAACAAAAAAAGAAcAAAACAAAAAAAGAAgAAAAMAAYAAAAGAAkAAAACAAUAAAAHAP7/AAAPAAAAAAAHAP//AAAPAAIAAAAHAAAAAAAPAAIAAAAHAAEAAAALAAIAAAAHAAIAAAAEAAEAAAAHAAMAAAAFAAIAAAAHAAQAAAADAAAAAAAHAAUAAAADAAAAAAAHAAYAAAADAAAAAAAHAAcAAAADAAAAAAAHAAgAAAAMAAYAAAAHAAkAAAAEAAUAAAAIAP7/AAAKAAYAAAAIAP//AAAJAAYAAAAIAAAAAAAKAAcAAAAIAAEAAAAAAAAAAAAIAAIAAAAAAAAAAAAIAAMAAAAHAAAAAAAIAAQAAAAIAAEAAAAIAAUAAAAMAAMAAAAIAAYAAAAAAAAAAAAIAAcAAAAAAAAAAAAIAAgAAAANAAYAAAAIAAkAAAACAAUAAAAJAP7/AAAEAAQAAAAJAP//AAAEAAUAAAAJAAAAAAALAAcAAAAJAAEAAAABAAAAAAAJAAIAAAABAAAAAAAJAAMAAAABAAAAAAAJAAQAAAAKAAAAAAAJAAUAAAALAAIAAAAJAAYAAAAFAAIAAAAJAAcAAAABAAAAAAAJAAgAAAANAAYAAAAJAAkAAAAEAAUAAAAKAP7/AAACAAQAAAAKAP//AAACAAUAAAAKAAAAAAACAAYAAAAKAAEAAAACAAAAAAAKAAIAAAAFAAMAAAAKAAMAAAACAAAAAAAKAAQAAAAHAAMAAAAKAAUAAAACAAAAAAAKAAYAAAAGAAMAAAAKAAcAAAACAAAAAAAKAAgAAAAMAAYAAAAKAAkAAAADAAUAAAALAP7/AAADAAQAAAALAP//AAADAAUAAAALAAAAAAADAAYAAAALAAEAAAADAAAAAAALAAIAAAAGAAMAAAALAAMAAAADAAAAAAALAAQAAAADAAAAAAALAAUAAAADAAAAAAALAAYAAAAGAAMAAAALAAcAAAADAAAAAAALAAgAAAANAAYAAAALAAkAAAADAAUAAAAMAP7/AAAEAAQAAAAMAP//AAAEAAUAAAAMAAAAAAAEAAYAAAAMAAEAAAAAAAAAAAAMAAIAAAAHAAAAAAAMAAMAAAAEAAEAAAAMAAQAAAAEAAIAAAAMAAUAAAAAAAAAAAAMAAYAAAAHAAMAAAAMAAcAAAAAAAAAAAAMAAgAAAANAAYAAAAMAAkAAAADAAUAAAANAP7/AAACAAQAAAANAP//AAACAAUAAAANAAAAAAACAAYAAAANAAEAAAACAAEAAAANAAIAAAABAAAAAAANAAMAAAABAAAAAAANAAQAAAABAAAAAAANAAUAAAABAAAAAAANAAYAAAABAAAAAAANAAcAAAABAAAAAAANAAgAAAANAAYAAAANAAkAAAAEAAUAAAAOAP7/AAADAAQAAAAOAP//AAADAAUAAAAOAAAAAAADAAYAAAAOAAEAAAAAAAAAAAAOAAIAAAAAAAAAAAAOAAMAAAABAAEAAAAOAAQAAAABAAMAAAAOAAUAAAABAAMAAAAOAAYAAAABAAMAAAAOAAcAAAADAAIAAAAOAAgAAAANAAYAAAAOAAkAAAADAAUAAAAPAP7/AAAEAAQAAAAPAP//AAAEAAUAAAAPAAAAAAAEAAYAAAAPAAEAAAAOAAUAAAAPAAIAAAAOAAUAAAAPAAMAAAAOAAUAAAAPAAQAAAAOAAUAAAAPAAUAAAAOAAUAAAAPAAYAAAAOAAUAAAAPAAcAAAAOAAUAAAAPAAgAAAAOAAYAAAAPAAkAAAAOAAcAAAA=")
+
+[node name="PlayerSpawn" parent="." instance=ExtResource("4_1fp1i")]
+position = Vector2(208, 218)
+
+[node name="Plant" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(11, 64)
+
+[node name="Plant2" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(11, 90)
+
+[node name="Plant3" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(11, 116)
+
+[node name="Plant4" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(36, 116)
+
+[node name="Plant5" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(36, 89)
+
+[node name="Plant6" parent="." instance=ExtResource("5_wa4h8")]
+position = Vector2(36, 64)
+
+[node name="LevelTransition" parent="." instance=ExtResource("5_xj8mw")]
+position = Vector2(224, -64)
+level = "res://Levels/Area01/01.tscn"
+side = 2
+
+[node name="NPC" parent="." instance=ExtResource("7_62xuh")]
+position = Vector2(123.942, 144)
+npc_resource = ExtResource("8_fbvcf")
+
+[node name="NpcBehaviorWander" parent="NPC" instance=ExtResource("8_f8c10")]
+wander_range = 1
+
+[node name="DialogInteraction" parent="NPC" instance=ExtResource("10_s1pmn")]
+
+[node name="DialogText" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "Hello mate, we're from Pallet Town next to this island., I'm [b]Oren[/b] and he is my chief [b]Nero[/b]. we're here to do some [b]research[/b]."
+npc_info = ExtResource("8_fbvcf")
+
+[node name="DialogText2" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "Nice to meet you, [b]Oren[/b]. I am [b]Tony[/b]. What's the [b]research[/b] about? "
+npc_info = ExtResource("12_2ebyk")
+
+[node name="DialogText3" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "Our village was recently attacked by slimes and the root cause is water contaimination. Therefore, we followed slime and found this island."
+npc_info = ExtResource("8_fbvcf")
+
+[node name="DialogText4" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "What have you found? Maybe I can help you on the research."
+npc_info = ExtResource("12_2ebyk")
+
+[node name="DialogText5" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "[b]Tony[/b], you are a true friend ! Appreciate that ! We found [b]a suspicious cave entrance at the north[/b], and a lot of slime traces outside."
+npc_info = ExtResource("8_fbvcf")
+
+[node name="DialogText6" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "I see, that's why i encountered so many slimes just now. I have eliminated them but I didnt see there is any [b]cave entrance[/b]."
+npc_info = ExtResource("12_2ebyk")
+
+[node name="DialogText7" type="Node" parent="NPC/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "You may look my chief [b]Nero[/b] for cave entrance. He will tell you the way to enter."
+npc_info = ExtResource("8_fbvcf")
+
+[node name="NPC_NERO" parent="." instance=ExtResource("7_62xuh")]
+position = Vector2(303.941, 144)
+npc_resource = ExtResource("8_yuemd")
+
+[node name="NpcBehaviorPatrol" parent="NPC_NERO" instance=ExtResource("11_q675y")]
+
+[node name="PatrolLocation" parent="NPC_NERO/NpcBehaviorPatrol" instance=ExtResource("12_sc27x")]
+modulate = Color(1, 0, 0, 1)
+position = Vector2(64, 0)
+
+[node name="PatrolLocation2" parent="NPC_NERO/NpcBehaviorPatrol" instance=ExtResource("12_sc27x")]
+modulate = Color(1, 1, 0, 1)
+position = Vector2(64, 62)
+
+[node name="PatrolLocation3" parent="NPC_NERO/NpcBehaviorPatrol" instance=ExtResource("12_sc27x")]
+modulate = Color(0, 1, 0, 1)
+position = Vector2(-74, 62)
+wait_time = 1.0
+
+[node name="PatrolLocation4" parent="NPC_NERO/NpcBehaviorPatrol" instance=ExtResource("12_sc27x")]
+modulate = Color(0, 1, 1, 1)
+position = Vector2(-74, 0)
+
+[node name="QuestActivatedSwitch" parent="NPC_NERO" instance=ExtResource("23_vtf5b")]
+remove_when_activated = true
+react_to_global_signal = true
+linked_quest = ExtResource("19_2koiu")
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Checking if player has quest"
+
+[node name="DialogInteraction" parent="NPC_NERO/QuestActivatedSwitch" instance=ExtResource("10_s1pmn")]
+
+[node name="DialogText" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "Hi [b]Tony[/b]! I believe Oren have told you the details. Would you help us to [b]investigate the suspicious cave and find my lost flute[/b]?"
+npc_info = ExtResource("8_yuemd")
+
+[node name="DialogChoice" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction"]
+script = ExtResource("16_as0ht")
+npc_info = ExtResource("8_yuemd")
+
+[node name="DialogBranch" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice"]
+script = ExtResource("17_lam8a")
+text = "You can count on it!"
+npc_info = ExtResource("8_yuemd")
+
+[node name="QuestAdvanceTrigger" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice/DialogBranch" instance=ExtResource("20_mgke4")]
+position = Vector2(306, 135)
+signal_name = "selected"
+linked_quest = ExtResource("19_2koiu")
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Step: 0 - N/A
+Complete: false"
+
+[node name="DialogText" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice/DialogBranch"]
+script = ExtResource("11_ufet7")
+text = "Thank you my friend ! You are a true hero !"
+npc_info = ExtResource("8_yuemd")
+
+[node name="DialogText2" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice/DialogBranch"]
+script = ExtResource("11_ufet7")
+text = "Oh, please be careful ! I heard some creepy sound from the cave."
+npc_info = ExtResource("8_yuemd")
+
+[node name="DialogBranch2" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice"]
+script = ExtResource("17_lam8a")
+text = "NO! You're crazy bananas!"
+npc_info = ExtResource("8_yuemd")
+
+[node name="DialogText" type="Node" parent="NPC_NERO/QuestActivatedSwitch/DialogInteraction/DialogChoice/DialogBranch2"]
+script = ExtResource("11_ufet7")
+text = "Geez.... such a lame guy !"
+npc_info = ExtResource("8_yuemd")
+
+[node name="QuestActivatedSwitch3" type="Node2D" parent="NPC_NERO"]
+script = ExtResource("21_dorfn")
+check_type = 3
+remove_when_activated = true
+react_to_global_signal = true
+linked_quest = ExtResource("19_2koiu")
+quest_complete = true
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Checking if quest is complete"
+
+[node name="QuestActivatedSwitch2" parent="NPC_NERO/QuestActivatedSwitch3" instance=ExtResource("23_vtf5b")]
+position = Vector2(0, -18)
+react_to_global_signal = true
+linked_quest = ExtResource("19_2koiu")
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Checking if player has quest"
+
+[node name="QuestActivatedSwitch2" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2" instance=ExtResource("23_vtf5b")]
+check_type = 2
+remove_when_activated = true
+react_to_global_signal = true
+linked_quest = ExtResource("19_2koiu")
+quest_step = 3
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Check if player is on step: return magical flute to nero"
+
+[node name="DialogInteraction" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch2" instance=ExtResource("10_s1pmn")]
+
+[node name="DialogText" type="Node" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch2/DialogInteraction"]
+script = ExtResource("11_ufet7")
+text = "Thank you [b]Tony[/b]! Please go to [b]north[/b] and you will see the cave entrance. Be careful !"
+npc_info = ExtResource("8_yuemd")
+
+[node name="QuestActivatedSwitch" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2" instance=ExtResource("23_vtf5b")]
+check_type = 2
+react_to_global_signal = true
+linked_quest = ExtResource("19_2koiu")
+quest_step = 3
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Check if player is on step: return magical flute to nero"
+
+[node name="DialogInteraction2" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch" instance=ExtResource("10_s1pmn")]
+
+[node name="DialogText" type="Node" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch/DialogInteraction2"]
+script = ExtResource("11_ufet7")
+text = "You saw undeadable zombie and green liquid on the floor? I suspect it is the root cause of contaminated in our village. Anyway, thank you!"
+npc_info = ExtResource("8_yuemd")
+
+[node name="QuestAdvanceTrigger" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch/DialogInteraction2" instance=ExtResource("20_mgke4")]
+signal_name = "finished"
+linked_quest = ExtResource("19_2koiu")
+quest_step = 3
+quest_complete = true
+settings_summary = "UPDATE QUEST:
+Quest: Recover Lost Magical Flute
+Step: 3 - return magical flute to nero
+Complete: true"
+
+[node name="Node" type="Node" parent="NPC_NERO/QuestActivatedSwitch3/QuestActivatedSwitch2/QuestActivatedSwitch/DialogInteraction2/QuestAdvanceTrigger"]
+script = SubResource("GDScript_ootk3")
+
+[node name="Pot" parent="." instance=ExtResource("18_gcr0t")]
+position = Vector2(144, 210)
+
+[node name="Pot2" parent="." instance=ExtResource("18_gcr0t")]
+position = Vector2(121, 210)
+
+[node name="PressurePlate" parent="." instance=ExtResource("19_ti3ls")]
+position = Vector2(282, 65)
+
+[node name="QuestAdvanceTrigger" parent="PressurePlate" instance=ExtResource("20_mgke4")]
+signal_name = "activated"
+linked_quest = ExtResource("21_7aj2d")
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Step: 0 - N/A
+Complete: false"
+
+[node name="QuestActivatedSwitch" parent="." instance=ExtResource("23_vtf5b")]
+position = Vector2(321, 65)
+react_to_global_signal = true
+linked_quest = ExtResource("21_7aj2d")
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Checking if player has quest"
+
+[node name="PressurePlate2" parent="QuestActivatedSwitch" instance=ExtResource("19_ti3ls")]
+
+[node name="QuestAdvanceTrigger" parent="QuestActivatedSwitch/PressurePlate2" instance=ExtResource("20_mgke4")]
+signal_name = "activated"
+linked_quest = ExtResource("21_7aj2d")
+quest_step = 1
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Step: 1 - Step 1
+Complete: false"
+
+[node name="QuestActivatedSwitch2" parent="." instance=ExtResource("23_vtf5b")]
+position = Vector2(359, 65)
+check_type = 2
+react_to_global_signal = true
+linked_quest = ExtResource("21_7aj2d")
+quest_step = 2
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Check if player is on step: step 2"
+
+[node name="PressurePlate3" parent="QuestActivatedSwitch2" instance=ExtResource("19_ti3ls")]
+
+[node name="QuestAdvanceTrigger" parent="QuestActivatedSwitch2/PressurePlate3" instance=ExtResource("20_mgke4")]
+signal_name = "activated"
+linked_quest = ExtResource("21_7aj2d")
+quest_step = 2
+quest_complete = true
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Step: 2 - step 2
+Complete: true"
+
+[node name="QuestActivatedSwitch3" parent="." instance=ExtResource("23_vtf5b")]
+position = Vector2(410, 123)
+check_type = 3
+remove_when_activated = true
+react_to_global_signal = true
+linked_quest = ExtResource("21_7aj2d")
+settings_summary = "UPDATE QUEST:
+Quest: Long Quest
+Checking if quest is complete"
+
+[node name="Pot" parent="QuestActivatedSwitch3" instance=ExtResource("18_gcr0t")]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("25_s24fa")
+
+[node name="Panel" type="Panel" parent="CanvasLayer"]
+custom_minimum_size = Vector2(250, 60)
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -125.0
+offset_right = 125.0
+offset_bottom = 66.0
+grow_horizontal = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Panel"]
+custom_minimum_size = Vector2(250, 60)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Panel/VBoxContainer"]
+layout_mode = 2
+text = "Interaction"
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+text = "【Use key C to interact with NPC or object】 "
+
+[node name="Timer" type="Timer" parent="CanvasLayer"]
